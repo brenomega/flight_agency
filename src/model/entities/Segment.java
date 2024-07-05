@@ -1,12 +1,14 @@
 package model.entities;
 
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Objects;
 
 import util.Id;
 
-public class Segment {
+public class Segment implements Serializable {
+	private static final long serialVersionUID = 1L;
 	
 	@Id
 	private int id;
@@ -22,6 +24,10 @@ public class Segment {
 		
 		NF.setMaximumFractionDigits(2);
 		NF.setMinimumFractionDigits(2);
+	}
+	
+	public Segment() {
+		
 	}
 	
 	public Segment(String origin, String destination, Double price, Double miles) {

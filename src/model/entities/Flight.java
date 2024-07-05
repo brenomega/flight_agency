@@ -1,17 +1,23 @@
 package model.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import util.Id;
 
-public class Flight {
-
+public class Flight implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	private int id;
 	private String origin;
 	private String destination;
 	private List<Segment> segments;
+	
+	public Flight() {
+		
+	}
 	
 	public Flight(String origin, String destination) {
 		this.origin = origin;
