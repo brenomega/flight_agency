@@ -8,7 +8,7 @@ public class SegmentDaoImpl extends GenericDaoImpl<Segment> implements SegmentDa
 	public Segment retrieveSegmentByOriginAndDestination(String origin, String destination) {
 		return map.values()
 	              .stream()
-	              .filter(flight -> flight.getOrigin().equals(origin) && flight.getDestination().equals(destination))
+	              .filter(segment -> segment.getOrigin().equals(origin) && segment.getDestination().equals(destination))
 	              .findFirst()
 	              .orElse(null);
 	}

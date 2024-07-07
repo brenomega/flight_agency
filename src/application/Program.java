@@ -4,8 +4,10 @@ import java.util.Scanner;
 
 import dao.FlightDao;
 import dao.SegmentDao;
+import dao.SegmentExecDao;
 import model.entities.Flight;
 import model.entities.Segment;
+import model.entities.SegmentExec;
 import util.DaoFactory;
 
 import java.io.*;
@@ -21,6 +23,7 @@ public class Program {
 		UI.clearScreen();
 		
 		retrieveData();
+		
 		Scanner input = new Scanner(System.in);
 		
 		
@@ -59,6 +62,7 @@ public class Program {
 	private static void retrieveData() {
 	    FlightDao flightDao = DaoFactory.getDao(FlightDao.class);
 	    SegmentDao segmentDao = DaoFactory.getDao(SegmentDao.class);
+	    SegmentExecDao segmentExecDao = DaoFactory.getDao(SegmentExecDao.class);
 	    File file = new File("myObjects.txt");
 
 	    if (!file.exists() || file.length() == 0) {
@@ -83,6 +87,12 @@ public class Program {
 
 	        Integer segmentCounter = (Integer) ois.readObject();
 	        segmentDao.setCounter(segmentCounter);
+	        
+	        Map<Integer, SegmentExec> segmentExecsMap = (Map<Integer, SegmentExec>) ois.readObject();
+	        segmentExecDao.setMap(segmentExecsMap);
+	        
+	        Integer segmentExecCounter = (Integer) ois.readObject();
+	        segmentExecDao.setCounter(segmentExecCounter);
 
 	        System.out.println("Data retrieved successfully.");
 
@@ -106,10 +116,13 @@ public class Program {
 	private static void saveData() {
 	    FlightDao flightDao = DaoFactory.getDao(FlightDao.class);
 	    SegmentDao segmentDao = DaoFactory.getDao(SegmentDao.class);
+	    SegmentExecDao segmentExecDao = DaoFactory.getDao(SegmentExecDao.class);
 	    Map<Integer, Flight> flightsMap = flightDao.getMap();
 	    Map<Integer, Segment> segmentsMap = segmentDao.getMap();
+	    Map<Integer, SegmentExec> segmentExecsMap = segmentExecDao.getMap();
 	    Integer flightCounter = flightDao.getCounter();
 	    Integer segmentCounter = segmentDao.getCounter();
+	    Integer segmentExecCounter = segmentExecDao.getCounter();
 
 	    try (FileOutputStream fos = new FileOutputStream(new File("myObjects.txt"));
 	         ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -118,6 +131,8 @@ public class Program {
 	        oos.writeObject(flightCounter);
 	        oos.writeObject(segmentsMap);
 	        oos.writeObject(segmentCounter);
+	        oos.writeObject(segmentExecsMap);
+	        oos.writeObject(segmentExecCounter);
 	        
 	        System.out.println("Data saved successfully.");
 	        
