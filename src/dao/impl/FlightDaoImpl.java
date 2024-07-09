@@ -30,7 +30,7 @@ public class FlightDaoImpl extends GenericDaoImpl<Flight> implements FlightDao {
 	        return false;
 	    }
 	    for (int i = 0; i < flightSegments.size(); i++) {
-	        if (flightSegments.get(i).getId() != segments.get(i).getId()) {
+	        if (flightSegments.get(i).getOrigin() != segments.get(i).getOrigin() || flightSegments.get(i).getDestination() != segments.get(i).getDestination()) {
 	            return false;
 	        }
 	    }

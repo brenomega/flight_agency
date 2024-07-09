@@ -15,6 +15,7 @@ public class SegmentExec implements Serializable {
     private LocalDateTime initialDate;
     private LocalDateTime finalDate;
     private Segment segment;
+    private int flightExecId;
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -62,11 +63,26 @@ public class SegmentExec implements Serializable {
     public void setSegment(Segment segment) {
         this.segment = segment;
     }
+    
+    public int getFlightExecId() {
+    	return flightExecId;
+    }
+    
+    public void setFlightExecId(int flightExecId) {
+    	this.flightExecId = flightExecId;
+    }
 
 	@Override
 	public String toString() {
-		return "SegmentExec [id=" + id + ", initialDate=" + getInitialDateFormatted() + ", finalDate=" + getFinalDateFormatted() + ", segment="
-				+ getSegment() + "]";
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("[").append("Id: ").append(id).append("/");
+	    sb.append("Data/Hora de inicio: ").append(getInitialDateFormatted()).append("/");
+    	sb.append("Data/Hora de fim: ").append(getFinalDateFormatted()).append("/");
+	    sb.append("Trecho: ").append(getSegment()).append(" (Id da execução de voo: ");
+	    sb.append(getFlightExecId()).append(")");
+	    
+	    sb.append("]");
+	    return sb.toString();
 	}
 
 	@Override

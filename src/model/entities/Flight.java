@@ -55,7 +55,17 @@ public class Flight implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Flight [id=" + id + ", origin=" + origin + ", destination=" + destination + ", segments=" + segments
-				+ "]";
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("{").append("Id: ").append(id).append("\n");
+	    sb.append("Origem: ").append(getOrigin()).append("\n");
+	    sb.append("Destino: ").append(getDestination()).append("\n");
+	    sb.append("Trechos: \n\n");
+	    
+	    for (Segment segment : getSegments()) {
+	        sb.append(segment).append("\n");
+	    }
+	    
+	    sb.append("}");
+	    return sb.toString();
 	}
 }

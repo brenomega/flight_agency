@@ -75,8 +75,13 @@ public class FlightExec implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "FlightExec [id=" + id + ", initialDate=" + getInitialDateFormatted() + ", finalDate=" + getFinalDateFormatted() + ", flight="
-				+ getFlight() + "]";
+        StringBuilder sb = new StringBuilder();
+    	sb.append("{").append("Id: ").append(id).append("\n");
+    	sb.append("Data/Hora de inicio: ").append(getInitialDateFormatted()).append("\n");
+    	sb.append("Data/Hora de fim: ").append(getFinalDateFormatted()).append("\n");
+    	sb.append("Voo: \n").append(getFlight()).append("}");
+
+    	return sb.toString();
 	}
 
 	@Override

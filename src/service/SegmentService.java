@@ -38,8 +38,4 @@ public class SegmentService {
 	public List<Segment> retrieveSegments() {
 		return segmentDao.retrieveAll();
 	}
-	
-	public Segment retrieveSegmentByOriginAndDestination(String origin, String destination) {
-		return segmentDao.retrieveSegmentByOriginAndDestination(origin, destination);
-	}
 }

@@ -80,29 +80,28 @@ public class FlightProgram {
 						System.out.println('\n' + "Informe as milhas do trecho " + count + ": ");
 						segmentMile = Double.parseDouble(input.nextLine());
 						mySegment = new Segment(lastDestination, segmentDestination, segmentPrice, segmentMile);
-					
-						Segment otherSegment = segmentService.retrieveSegmentByOriginAndDestination(lastDestination, segmentDestination);
-						if (mySegment.equals(otherSegment)) {
-							segments.add(otherSegment);
-							UI.clearScreen();
-							System.out.println("\nTrecho número " + otherSegment.getId() + " já existe." + "\n\n");
-						} else {
-							segmentService.include(mySegment);
-							segments.add(mySegment);
-							UI.clearScreen();
-							System.out.println("\nTrecho número " + mySegment.getId() + " cadastrado com sucesso!" + "\n\n");
-						}
+					    segments.add(mySegment);
 
 						lastDestination = segmentDestination;
 						count++;
+						UI.clearScreen();
 					}
-					myFlight.setSegments(segments);
 				
 					Flight otherFlight = flightService.retrieveFlightByOriginDestinationAndSegments(origin, destination, segments);
-					if (myFlight.equals(otherFlight)) {
+					if (otherFlight != null) {
+						UI.clearScreen();
 						System.out.println("\nVôo número " + otherFlight.getId() + " já existe.");
 					} else {
+						for (Segment segment : segments) {
+							segment.setFlightId(0);
+							segmentService.include(segment);
+						}
+						myFlight.setSegments(segments);
 						flightService.include(myFlight);
+						for (Segment segment : flightService.retrieveAllFlightSegments(myFlight.getId())) {
+							segment.setFlightId(myFlight.getId());
+						}
+						UI.clearScreen();
 						System.out.println("\nVôo número " + myFlight.getId() + " cadastrado com sucesso!");
 					}
 				}
@@ -139,17 +138,8 @@ public class FlightProgram {
 			            mySegmentExec = new SegmentExec(initialDate, finalDate);
 			            Segment mySegment = segmentService.retrieveSegmentById(flight.getSegments().get(0).getId());
 			            mySegmentExec.setSegment(mySegment);
-			            SegmentExec otherSegmentExec = segmentExecService.retrieveSegmentExecutionByDateTimeAndSegment(initialDate, finalDate, flight.getSegments().get(0).getId());
-			            if (mySegmentExec.equals(otherSegmentExec)) {
-			                segmentExecs.add(otherSegmentExec);
-			                UI.clearScreen();
-			                System.out.println("\nExecução de Trecho número " + otherSegmentExec.getId() + " já existe." + "\n\n");
-			            } else {
-			                segmentExecs.add(mySegmentExec);
-			                segmentExecService.include(mySegmentExec);
-			                UI.clearScreen();
-			                System.out.println("\nExecução de trecho número " + mySegmentExec.getId() + " cadastrada com sucesso!" + "\n\n");
-			            }
+			            segmentExecs.add(mySegmentExec);
+			           
 			        } else {
 			            for (Segment segment : flight.getSegments()) {
 			                if (count == 1) {
@@ -165,17 +155,8 @@ public class FlightProgram {
 			                    mySegmentExec = new SegmentExec(initialDate, finalSegmentDate);
 			                    Segment mySegment = segmentService.retrieveSegmentById(segment.getId());
 			                    mySegmentExec.setSegment(mySegment);
-			                    SegmentExec otherSegmentExec = segmentExecService.retrieveSegmentExecutionByDateTimeAndSegment(initialDate, finalSegmentDate, segment.getId());
-			                    if (mySegmentExec.equals(otherSegmentExec)) {
-			                        segmentExecs.add(otherSegmentExec);
-			                        UI.clearScreen();
-			                        System.out.println("\nExecução de Trecho número " + otherSegmentExec.getId() + " já existe." + "\n\n");
-			                    } else {
-			                        segmentExecs.add(mySegmentExec);
-			                        segmentExecService.include(mySegmentExec);
-			                        UI.clearScreen();
-			                        System.out.println("\nExecução de trecho número " + mySegmentExec.getId() + " cadastrada com sucesso!" + "\n\n");
-			                    }
+			                    segmentExecs.add(mySegmentExec);
+
 			                    lastDate = finalSegmentDate;
 			                    count++;
 			                } else if (count == flight.getSegments().size()) {
@@ -191,17 +172,7 @@ public class FlightProgram {
 			                    mySegmentExec = new SegmentExec(initialSegmentDate, finalDate);
 			                    Segment mySegment = segmentService.retrieveSegmentById(segment.getId());
 			                    mySegmentExec.setSegment(mySegment);
-			                    SegmentExec otherSegmentExec = segmentExecService.retrieveSegmentExecutionByDateTimeAndSegment(initialSegmentDate, finalDate, segment.getId());
-			                    if (mySegmentExec.equals(otherSegmentExec)) {
-			                        segmentExecs.add(otherSegmentExec);
-			                        UI.clearScreen();
-			                        System.out.println("\nExecução de Trecho número " + otherSegmentExec.getId() + " já existe." + "\n\n");
-			                    } else {
-			                        segmentExecs.add(mySegmentExec);
-			                        segmentExecService.include(mySegmentExec);
-			                        UI.clearScreen();
-			                        System.out.println("\nExecução de trecho número " + mySegmentExec.getId() + " cadastrada com sucesso!" + "\n\n");
-			                    }
+			                    segmentExecs.add(mySegmentExec);  
 			                } else {
 			                    System.out.println('\n' + "Informe a Data/Hora (dd/MM/yyyy HH:mm) de início do trecho " + count + " do vôo: ");
 			                    initialSegmentDate = input.nextLine();
@@ -222,30 +193,30 @@ public class FlightProgram {
 			                    mySegmentExec = new SegmentExec(initialSegmentDate, finalSegmentDate);
 			                    Segment mySegment = segmentService.retrieveSegmentById(segment.getId());
 			                    mySegmentExec.setSegment(mySegment);
-			                    SegmentExec otherSegmentExec = segmentExecService.retrieveSegmentExecutionByDateTimeAndSegment(initialSegmentDate, finalSegmentDate, segment.getId());
-			                    if (mySegmentExec.equals(otherSegmentExec)) {
-			                        segmentExecs.add(otherSegmentExec);
-			                        UI.clearScreen();
-			                        System.out.println("\nExecução de Trecho número " + otherSegmentExec.getId() + " já existe." + "\n\n");
-			                    } else {
-			                        segmentExecs.add(mySegmentExec);
-			                        segmentExecService.include(mySegmentExec);
-			                        UI.clearScreen();
-			                        System.out.println("\nExecução de trecho número " + mySegmentExec.getId() + " cadastrada com sucesso!" + "\n\n");
-			                    }
+			                    segmentExecs.add(mySegmentExec);
+			                    
 			                    lastDate = finalSegmentDate;
 			                    count++;
 			                }
 			            }
 			        }
-			        myFlightExec.setSegmentExecs(segmentExecs);
 			        FlightExec otherFlightExec = flightExecService.retrieveFlightExecutionByDateTimeAndFlight(initialDate, finalDate, id);
-			        if (myFlightExec.equals(otherFlightExec)) {
-			            System.out.println("\nExecução de Vôo número " + otherFlightExec.getId() + " já existe." + "\n\n");
-			        } else {
-			            flightExecService.include(myFlightExec);
-			            System.out.println("\nExecução de vôo número " + myFlightExec.getId() + " cadastrada com sucesso!" + "\n\n");
-			        }
+					if (otherFlightExec != null) {
+						UI.clearScreen();
+						System.out.println("\nExecução de voo número " + otherFlightExec.getId() + " já existe.");
+					} else {
+						for (SegmentExec segmentExec : segmentExecs) {
+							segmentExec.setFlightExecId(0);
+							segmentExecService.include(segmentExec);
+						}
+						myFlightExec.setSegmentExecs(segmentExecs);
+						flightExecService.include(myFlightExec);
+						for (SegmentExec segmentExec : flightExecService.retrieveAllFlightExecSegmentExecs(myFlightExec.getId())) {
+							segmentExec.setFlightExecId(myFlightExec.getId());
+						}
+						UI.clearScreen();
+						System.out.println("\nExecução de voo número " + myFlightExec.getId() + " cadastrada com sucesso!");
+					}
 			    } catch (FlightException | SegmentExecException | FlightExecException e) {
 			        UI.clearScreen();
 			        System.out.println(e.getMessage());
@@ -258,6 +229,10 @@ public class FlightProgram {
 				try {
 					List<FlightExec> allFlightExecs = flightExecService.retrieveAllFlightExecutionsWhereFlightAppears(id);
 					if (allFlightExecs.isEmpty()) {
+						List<Segment> segments = flightService.retrieveAllFlightSegments(id);
+						for (Segment segment : segments) {
+							segmentService.remove(segment.getId());
+						}
 						flightService.remove(id);
 						UI.clearScreen();
 						System.out.println("\nVôo número " + id + " removido com sucesso!");
@@ -265,7 +240,7 @@ public class FlightProgram {
 						System.out.println("\nNão foi possível remover o voo! Há execuções para ele.");
 					}
 				}
-				catch (FlightException | FlightExecException e) {
+				catch (FlightException | FlightExecException | SegmentException e) {
 					UI.clearScreen();
 					System.out.println(e.getMessage());
 				}
@@ -275,6 +250,11 @@ public class FlightProgram {
 				int id = Integer.parseInt(input.nextLine());
 				
 				try {
+					List<SegmentExec> segmentExecs = flightExecService.retrieveAllFlightExecSegmentExecs(id);
+					for (SegmentExec segmentExec : segmentExecs) {
+						segmentExecService.remove(segmentExec.getId());
+					}
+					
 					flightExecService.remove(id);
 					
 					UI.clearScreen();

@@ -16,6 +16,7 @@ public class Segment implements Serializable {
 	private String destination;
 	private double price;
 	private double miles;
+	private int flightId;
 	
 	private static final NumberFormat NF;
 	
@@ -72,11 +73,27 @@ public class Segment implements Serializable {
 	public void setMiles(Double miles) {
 		this.miles = miles;
 	}
+	
+	public int getFlightId() {
+		return flightId;
+	}
+	
+	public void setFlightId(int flightId) {
+		this.flightId = flightId;
+	}
 
 	@Override
 	public String toString() {
-		return "Segment [id=" + id + ", origin=" + origin + ", destination=" + destination + ", price=" + getPrice()
-				+ ", miles=" + getMiles() + "]";
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("[").append("Id: ").append(id).append("/");
+	    sb.append("Origem: ").append(getOrigin()).append("/");
+	    sb.append("Destino: ").append(getDestination()).append("/");
+	    sb.append("Preço: ").append(getPrice()).append("/");
+	    sb.append("Milhas: ").append(getMiles()).append("/");
+	    sb.append("Id do voo: ").append(getFlightId());
+	    
+	    sb.append("]");
+	    return sb.toString();
 	}
 
 	@Override
