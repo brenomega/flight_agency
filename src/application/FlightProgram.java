@@ -106,6 +106,7 @@ public class FlightProgram {
 					}
 				}
 				catch (SegmentException | FlightException e) {
+					UI.clearScreen();
 					System.out.println(e.getMessage());
 				}
 			}

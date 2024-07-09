@@ -61,6 +61,10 @@ public class Segment implements Serializable {
 	public String getPrice() {
 		return NF.format(price);
 	}
+	
+	public double getDoublePrice() {
+		return price;
+	}
 
 	public void setPrice(Double price) {
 		this.price = price;
@@ -68,6 +72,10 @@ public class Segment implements Serializable {
 
 	public String getMiles() {
 		return NF.format(miles);
+	}
+	
+	public double getDoubleMiles() {
+		return miles;
 	}
 
 	public void setMiles(Double miles) {

@@ -2,14 +2,18 @@ package application;
 
 import java.util.Scanner;
 
+import dao.CustomerDao;
 import dao.FlightDao;
 import dao.FlightExecDao;
 import dao.SegmentDao;
 import dao.SegmentExecDao;
+import dao.TicketDao;
+import model.entities.Customer;
 import model.entities.Flight;
 import model.entities.FlightExec;
 import model.entities.Segment;
 import model.entities.SegmentExec;
+import model.entities.Ticket;
 import util.DaoFactory;
 
 import java.io.*;
@@ -21,6 +25,7 @@ public class Program {
 		
 		FlightProgram flightProgram = new FlightProgram();
 		SegmentProgram segmentProgram = new SegmentProgram();
+		CustomerProgram customerProgram = new CustomerProgram();
 		Scanner input = new Scanner(System.in);
 		
 		UI.clearScreen();
@@ -58,9 +63,10 @@ public class Program {
 			System.out.println('\n' + "O que você deseja fazer?");
 			System.out.println('\n' + "1. Tratar Voos");
 			System.out.println('\n' + "2. Tratar Trechos");
-			System.out.println('\n' + "3. Sair");
+			System.out.println('\n' + "3. Interface do Cliente");
+			System.out.println('\n' + "4. Sair");
 			
-			System.out.println('\n' + "Digite um número entre 1 e 3:");
+			System.out.println('\n' + "Digite um número entre 1 e 4:");
 			int option = Integer.parseInt(input.nextLine());
 			
 			UI.clearScreen();
@@ -73,6 +79,9 @@ public class Program {
 				segmentProgram.program();
 			}
 			case 3 -> {
+				customerProgram.program();
+			}
+			case 4 -> {
 				proceed = false;
 				saveData();
 			}
@@ -89,6 +98,8 @@ public class Program {
 	    SegmentDao segmentDao = DaoFactory.getDao(SegmentDao.class);
 	    SegmentExecDao segmentExecDao = DaoFactory.getDao(SegmentExecDao.class);
 	    FlightExecDao flightExecDao = DaoFactory.getDao(FlightExecDao.class);
+	    TicketDao ticketDao = DaoFactory.getDao(TicketDao.class);
+	    CustomerDao customerDao = DaoFactory.getDao(CustomerDao.class);
 	    File file = new File("myObjects.txt");
 
 	    if (!file.exists() || file.length() == 0) {
@@ -125,6 +136,18 @@ public class Program {
 	        
 	        Integer flightExecCounter = (Integer) ois.readObject();
 	        flightExecDao.setCounter(flightExecCounter);
+	        
+	        Map<Integer, Ticket> ticketsMap = (Map<Integer, Ticket>) ois.readObject();
+	        ticketDao.setMap(ticketsMap);
+	        
+	        Integer ticketCounter = (Integer) ois.readObject();
+	        ticketDao.setCounter(ticketCounter);
+	        
+	        Map<Integer, Customer> customersMap = (Map<Integer, Customer>) ois.readObject();
+	        customerDao.setMap(customersMap);
+	        
+	        Integer customerCounter = (Integer) ois.readObject();
+	        customerDao.setCounter(customerCounter);
 
 	        System.out.println("Data retrieved successfully.");
 
@@ -150,14 +173,20 @@ public class Program {
 	    SegmentDao segmentDao = DaoFactory.getDao(SegmentDao.class);
 	    SegmentExecDao segmentExecDao = DaoFactory.getDao(SegmentExecDao.class);
 	    FlightExecDao flightExecDao = DaoFactory.getDao(FlightExecDao.class);
+	    TicketDao ticketDao = DaoFactory.getDao(TicketDao.class);
+	    CustomerDao customerDao = DaoFactory.getDao(CustomerDao.class);
 	    Map<Integer, Flight> flightsMap = flightDao.getMap();
 	    Map<Integer, Segment> segmentsMap = segmentDao.getMap();
 	    Map<Integer, SegmentExec> segmentExecsMap = segmentExecDao.getMap();
 	    Map<Integer, FlightExec> flightExecsMap = flightExecDao.getMap();
+	    Map<Integer, Ticket> ticketsMap = ticketDao.getMap();
+	    Map<Integer, Customer> customersMap = customerDao.getMap();
 	    Integer flightCounter = flightDao.getCounter();
 	    Integer segmentCounter = segmentDao.getCounter();
 	    Integer segmentExecCounter = segmentExecDao.getCounter();
 	    Integer flightExecCounter = flightExecDao.getCounter();
+	    Integer ticketCounter = ticketDao.getCounter();
+	    Integer customerCounter = customerDao.getCounter();
 
 	    try (FileOutputStream fos = new FileOutputStream(new File("myObjects.txt"));
 	         ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -170,6 +199,10 @@ public class Program {
 	        oos.writeObject(segmentExecCounter);
 	        oos.writeObject(flightExecsMap);
 	        oos.writeObject(flightExecCounter);
+	        oos.writeObject(ticketsMap);
+	        oos.writeObject(ticketCounter);
+	        oos.writeObject(customersMap);
+	        oos.writeObject(customerCounter);
 	        
 	        System.out.println("Data saved successfully.");
 	        
