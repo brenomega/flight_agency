@@ -18,6 +18,9 @@ public class SegmentExecService {
 		if (segmentExec.getSegment() == null) {
 			throw new SegmentExecException("There is no segment to assign date!");
 		}
+		if (segmentExec.getFinalDate().isBefore(segmentExec.getInitialDate())) {
+	        throw new SegmentExecException("Final date cannot be before initial date!");
+	    }
 		return segmentExecDao.include(segmentExec);
 	}
 	

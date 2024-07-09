@@ -35,13 +35,13 @@ public class SegmentProgram {
 			System.out.println('\n' + "3. Remover um trecho");
 			System.out.println('\n' + "4. Remover uma execução de trecho");
 			System.out.println('\n' + "5. Listar todos os trechos");
-			System.out.println('\n' + "6. Listar todas as execuções de trechos");
+			System.out.println('\n' + "6. Listar todas as execuções de trecho");
 			System.out.println('\n' + "7. Listar todos os vôos em que um trecho aparece");
 			System.out.println('\n' + "8. Listar todas execuções para um trecho");
 			System.out.println('\n' + "9. Listar todas execuções de trecho entre duas datas");
 			System.out.println('\n' + "10. Voltar");
 			
-			System.out.println('\n' + "Digite um número entre 1 e 9: ");
+			System.out.println('\n' + "Digite um número entre 1 e 10: ");
 			int option = Integer.parseInt(input.nextLine());
 			
 			UI.clearScreen();

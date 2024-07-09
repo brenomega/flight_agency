@@ -3,9 +3,11 @@ package application;
 import java.util.Scanner;
 
 import dao.FlightDao;
+import dao.FlightExecDao;
 import dao.SegmentDao;
 import dao.SegmentExecDao;
 import model.entities.Flight;
+import model.entities.FlightExec;
 import model.entities.Segment;
 import model.entities.SegmentExec;
 import util.DaoFactory;
@@ -19,13 +21,36 @@ public class Program {
 		
 		FlightProgram flightProgram = new FlightProgram();
 		SegmentProgram segmentProgram = new SegmentProgram();
+		Scanner input = new Scanner(System.in);
 		
 		UI.clearScreen();
 		
-		retrieveData();
+		System.out.println('\n' + "========================================================");
+		System.out.println("Deseja carregar os dados salvos?");
+		System.out.println('\n' + "1. Sim");
+		System.out.println('\n' + "2. Não");
 		
-		Scanner input = new Scanner(System.in);
+		System.out.println('\n' + "Resposta:");
+		int data = Integer.parseInt(input.nextLine());
 		
+		switch (data) {
+		case 1 -> {
+			UI.clearScreen();
+			retrieveData();
+		}
+		case 2 -> {
+			UI.clearScreen();
+			System.out.println('\n' + "========================================================");
+			System.out.println("Tem certeza?");
+			System.out.println('\n' + "1. Sim");
+			System.out.println('\n' + "2. Não");
+			
+			System.out.println('\n' + "Resposta:");
+			data = Integer.parseInt(input.nextLine());
+			UI.clearScreen();
+			if (data == 2) retrieveData();
+		}
+		}
 		
 		boolean proceed = true;
 		while (proceed) {
@@ -63,6 +88,7 @@ public class Program {
 	    FlightDao flightDao = DaoFactory.getDao(FlightDao.class);
 	    SegmentDao segmentDao = DaoFactory.getDao(SegmentDao.class);
 	    SegmentExecDao segmentExecDao = DaoFactory.getDao(SegmentExecDao.class);
+	    FlightExecDao flightExecDao = DaoFactory.getDao(FlightExecDao.class);
 	    File file = new File("myObjects.txt");
 
 	    if (!file.exists() || file.length() == 0) {
@@ -93,6 +119,12 @@ public class Program {
 	        
 	        Integer segmentExecCounter = (Integer) ois.readObject();
 	        segmentExecDao.setCounter(segmentExecCounter);
+	        
+	        Map<Integer, FlightExec> flightExecsMap = (Map<Integer, FlightExec>) ois.readObject();
+	        flightExecDao.setMap(flightExecsMap);
+	        
+	        Integer flightExecCounter = (Integer) ois.readObject();
+	        flightExecDao.setCounter(flightExecCounter);
 
 	        System.out.println("Data retrieved successfully.");
 
@@ -117,12 +149,15 @@ public class Program {
 	    FlightDao flightDao = DaoFactory.getDao(FlightDao.class);
 	    SegmentDao segmentDao = DaoFactory.getDao(SegmentDao.class);
 	    SegmentExecDao segmentExecDao = DaoFactory.getDao(SegmentExecDao.class);
+	    FlightExecDao flightExecDao = DaoFactory.getDao(FlightExecDao.class);
 	    Map<Integer, Flight> flightsMap = flightDao.getMap();
 	    Map<Integer, Segment> segmentsMap = segmentDao.getMap();
 	    Map<Integer, SegmentExec> segmentExecsMap = segmentExecDao.getMap();
+	    Map<Integer, FlightExec> flightExecsMap = flightExecDao.getMap();
 	    Integer flightCounter = flightDao.getCounter();
 	    Integer segmentCounter = segmentDao.getCounter();
 	    Integer segmentExecCounter = segmentExecDao.getCounter();
+	    Integer flightExecCounter = flightExecDao.getCounter();
 
 	    try (FileOutputStream fos = new FileOutputStream(new File("myObjects.txt"));
 	         ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -133,6 +168,8 @@ public class Program {
 	        oos.writeObject(segmentCounter);
 	        oos.writeObject(segmentExecsMap);
 	        oos.writeObject(segmentExecCounter);
+	        oos.writeObject(flightExecsMap);
+	        oos.writeObject(flightExecCounter);
 	        
 	        System.out.println("Data saved successfully.");
 	        
